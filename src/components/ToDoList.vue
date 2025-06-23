@@ -16,6 +16,7 @@
         <h3>Создать новую задачу</h3>
         <p>Описание</p>
         <input
+          style="height: 40px; border-radius: 8px; border: rgba(221, 226, 228, 1) 1px solid; padding: 0px 15px; margin-top: -25px;"
           v-model="modalInput"
           placeholder="Введите описание"
           @keyup.enter="createTodo"
@@ -53,18 +54,22 @@
     </div>
 
     <div class="sort-block">
-      <span>Сортировать по: <b>Дата</b></span>
+      <span>Сортировать по:</span>
+      <select v-model="sortBy">
+        <option value="status">Статусу</option>
+        <option value="date">Дате</option>
+      </select>
       <img src="/Vector9.png" alt="Сортировка" />
     </div>
 
     <ul>
-      <li v-for="(todo, index) in filteredTodos" :key="index" class="todo-item">
+      <li v-for="todo in sortedTodos" :key="todo.id" class="todo-item">
         <div class="todo-left">
-          <span class="custom-checkbox" @click="toggleDone(index)">
+          <span class="custom-checkbox" @click="toggleDone(todo.id)">
             <img
               :src="todo.done ? '/Group1427.png' : '/Ellipse34.png'"
               :style="todo.done
-                ? 'width: 28px; height: 28px; margin-top: 7px; margin-left: -4px'
+                ? 'width: 28px; height: 28px; margin-top: 7px'
                 : 'width: 20px; height: 20px;'"
               alt="Статус"
             />
@@ -80,7 +85,7 @@
           <span class="todo-date">
             {{ formatDate(todo.createdAt) }}
           </span>
-          <button @click="removeTodo(index)" aria-label="Удалить" style="background: none; border:none"><img src="/Component36-2.png" alt=""></button>
+          <button @click="removeTodo(todo.id)" style="background: none; border: none;" aria-label="Удалить"><img src="/Component36-2.png" alt=""></button>
         </div>
       </li>
     </ul>
@@ -95,22 +100,24 @@ const modalInput = ref('')
 const newTodo = ref('')
 const todos = ref([])
 const searchQuery = ref('')
+const sortBy = ref('status')
 
-const filteredTodos = computed(() => {
-  if (!searchQuery.value.trim()) return todos.value;
-  const query = searchQuery.value.trim().toLowerCase();
-  return todos.value.filter(todo => {
-    // Поиск по тексту задачи
-    const textMatch = todo.text.toLowerCase().includes(query);
-    // Поиск по статусу
-    const status = todo.done ? 'выполнено' : 'в работе';
-    const statusMatch = status.includes(query);
-    // Поиск по дате (если нужно)
-    const dateMatch = todo.createdAt
-      ? formatDate(todo.createdAt).includes(query)
-      : false;
-    return textMatch || statusMatch || dateMatch;
-  });
+let nextId = 1;
+
+const sortedTodos = computed(() => {
+  let result = [...todos.value];
+  if (sortBy.value === 'status') {
+    // Сортировка только по статусу: "В работе" выше, "Выполнено" ниже
+    result.sort((a, b) => a.done - b.done);
+  } else if (sortBy.value === 'date') {
+    // Сортировка только по дате: новые выше
+    result.sort((a, b) => {
+      const dateA = a.createdAt ? new Date(a.createdAt) : new Date(0);
+      const dateB = b.createdAt ? new Date(b.createdAt) : new Date(0);
+      return dateB - dateA;
+    });
+  }
+  return result;
 });
 
 function addTodo() {
@@ -120,13 +127,14 @@ function addTodo() {
   }
 }
 
-function removeTodo(index) {
-  todos.value.splice(index, 1)
+function removeTodo(id) {
+  todos.value = todos.value.filter(t => t.id !== id);
 }
 
 function createTodo() {
   if (modalInput.value.trim() !== '') {
     todos.value.push({
+      id: nextId++,
       text: modalInput.value,
       done: false,
       createdAt: new Date()
@@ -142,8 +150,9 @@ function formatDate(date) {
   return d.toLocaleDateString('ru-RU')
 }
 
-function toggleDone(index) {
-  todos.value[index].done = !todos.value[index].done
+function toggleDone(id) {
+  const todo = todos.value.find(t => t.id === id);
+  if (todo) todo.done = !todo.done;
 }
 </script>
 
@@ -159,6 +168,7 @@ function toggleDone(index) {
   align-items: center;
   gap: 8px;
   position: relative;
+
 }
 
 .todo-header h2 {
@@ -172,6 +182,7 @@ function toggleDone(index) {
   width: 113px;
   height: 32px;
   letter-spacing: 0%;
+  
 }
 
 .add-btn {
@@ -388,10 +399,18 @@ ul {
   cursor: pointer;
 }
 
-.modal h3,
+.modal h3{
+  text-align: left;
+  margin-left: 0;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 132%;
+}
 .modal p {
   text-align: left;
   margin-left: 0;
+  font-size: 14px;
+  margin-top: -10px;
 }
 
 .todo-status {
