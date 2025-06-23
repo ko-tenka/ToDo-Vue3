@@ -28,7 +28,11 @@
 
     <form @submit.prevent="addTodo" class="todo-form">
       <img src="/Vector.png" alt="" />
-      <input type="text" v-model="newTodo" placeholder="Поиск Имени, статуса или даты" />
+      <input
+        type="text"
+        v-model="searchQuery"
+        placeholder="Поиск Имени, статуса или даты"
+      />
     </form>
 
     <div class="todo-desc">
@@ -54,7 +58,7 @@
     </div>
 
     <ul>
-      <li v-for="(todo, index) in todos" :key="index" class="todo-item">
+      <li v-for="(todo, index) in filteredTodos" :key="index" class="todo-item">
         <div class="todo-left">
           <span class="custom-checkbox" @click="toggleDone(index)">
             <img
@@ -76,7 +80,7 @@
           <span class="todo-date">
             {{ formatDate(todo.createdAt) }}
           </span>
-          <button @click="removeTodo(index)" aria-label="Удалить" style="background: none; border:none;"><img src="/Component36-2.png" alt=""></button>
+          <button @click="removeTodo(index)" aria-label="Удалить" style="background: none; border:none"><img src="/Component36-2.png" alt=""></button>
         </div>
       </li>
     </ul>
@@ -84,12 +88,30 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 
 const showModal = ref(false)
 const modalInput = ref('')
 const newTodo = ref('')
 const todos = ref([])
+const searchQuery = ref('')
+
+const filteredTodos = computed(() => {
+  if (!searchQuery.value.trim()) return todos.value;
+  const query = searchQuery.value.trim().toLowerCase();
+  return todos.value.filter(todo => {
+    // Поиск по тексту задачи
+    const textMatch = todo.text.toLowerCase().includes(query);
+    // Поиск по статусу
+    const status = todo.done ? 'выполнено' : 'в работе';
+    const statusMatch = status.includes(query);
+    // Поиск по дате (если нужно)
+    const dateMatch = todo.createdAt
+      ? formatDate(todo.createdAt).includes(query)
+      : false;
+    return textMatch || statusMatch || dateMatch;
+  });
+});
 
 function addTodo() {
   if (newTodo.value.trim()) {
