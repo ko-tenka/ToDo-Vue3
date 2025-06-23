@@ -63,7 +63,7 @@
     </div>
 
     <ul>
-      <li v-for="todo in sortedTodos" :key="todo.id" class="todo-item">
+      <li v-for="todo in filteredAndSortedTodos" :key="todo.id" class="todo-item">
         <div class="todo-left">
           <span class="custom-checkbox" @click="toggleDone(todo.id)">
             <img
@@ -104,14 +104,24 @@ const sortBy = ref('status')
 
 let nextId = 1;
 
-const sortedTodos = computed(() => {
+const filteredAndSortedTodos = computed(() => {
   let result = [...todos.value];
+  if (searchQuery.value.trim()) {
+    const query = searchQuery.value.trim().toLowerCase();
+    result = result.filter(todo => {
+      const textMatch = todo.text.toLowerCase().includes(query);
+      const status = todo.done ? 'выполнено' : 'в работе';
+      const statusMatch = status.includes(query);
+      const dateMatch = todo.createdAt
+        ? formatDate(todo.createdAt).includes(query)
+        : false;
+      return textMatch || statusMatch || dateMatch;
+    });
+  }
   if (sortBy.value === 'status') {
-    // Сортировка только по статусу: "В работе" выше, "Выполнено" ниже
-    result.sort((a, b) => a.done - b.done);
+    result = [...result].sort((a, b) => a.done - b.done);
   } else if (sortBy.value === 'date') {
-    // Сортировка только по дате: новые выше
-    result.sort((a, b) => {
+    result = [...result].sort((a, b) => {
       const dateA = a.createdAt ? new Date(a.createdAt) : new Date(0);
       const dateB = b.createdAt ? new Date(b.createdAt) : new Date(0);
       return dateB - dateA;
