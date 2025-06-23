@@ -1,5 +1,34 @@
-# Vue 3 + Vite
+# ToDo List на Vue 3 + Vite
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+Это приложение — современный ToDo List, реализованный на Vue 3 с использованием Vite.
 
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
+## Возможности
+
+- Добавление, удаление и отметка задач как выполненных
+- Кастомные чекбоксы с иконками
+- Модальное окно для создания задачи
+- Поиск по задачам (по тексту, статусу, дате)
+- Сортировка по дате и по статусу
+- Красивый UI: блюр фона при модалке, подсветка строки при наведении, бордеры между задачами
+
+## Запуск проекта
+
+1. Установите зависимости:
+   ```bash
+   npm install
+   ```
+2. Запустите проект:
+   ```bash
+   npm run dev
+   ```
+
+## Структура проекта
+
+- `src/components/ToDoList.vue` — основной компонент приложения
+
+
+## Используемые технологии
+
+- [Vue 3](https://vuejs.org/)
+- [Vite](https://vitejs.dev/)
+

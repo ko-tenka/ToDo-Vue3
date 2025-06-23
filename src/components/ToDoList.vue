@@ -264,10 +264,11 @@ ul {
 }
 
 .todo-text {
+  flex: 1;
+  min-width: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 300px;
 }
 
 .todo-right {
