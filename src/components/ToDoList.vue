@@ -55,12 +55,24 @@
 
     <ul>
       <li v-for="(todo, index) in todos" :key="index">
-        <label style="flex: 1; display: flex; align-items: center; gap: 8px;">
-          <input type="checkbox" v-model="todo.done" />
-          <span :style="{ textDecoration: todo.done ? 'line-through' : 'none' }">
-            {{ todo.text }}
-          </span>
-        </label>
+        <span class="custom-checkbox" @click="toggleDone(index)">
+          <img
+            :src="todo.done ? '/Group1427.png' : '/Ellipse34.png'"
+            :style="todo.done
+              ? 'width: 28px; height: 28px; margin-top: 7px'
+              : 'width: 20px; height: 20px;'"
+            alt="Статус"
+          />
+        </span>
+        <span>
+          {{ todo.text }}
+        </span>
+        <span class="todo-status" :class="todo.done ? 'done' : 'in-progress'">
+          {{ todo.done ? 'Выполнено' : 'В работе' }}
+        </span>
+        <span class="todo-date">
+          {{ formatDate(todo.createdAt) }}
+        </span>
         <button @click="removeTodo(index)" aria-label="Удалить">🗑️</button>
       </li>
     </ul>
@@ -87,11 +99,25 @@ function removeTodo(index) {
 }
 
 function createTodo() {
-  if (modalInput.value.trim()) {
-    todos.value.push({ text: modalInput.value, done: false })
+  if (modalInput.value.trim() !== '') {
+    todos.value.push({
+      text: modalInput.value,
+      done: false,
+      createdAt: new Date()
+    })
     modalInput.value = ''
     showModal.value = false
   }
+}
+
+function formatDate(date) {
+  if (!date) return ''
+  const d = new Date(date)
+  return d.toLocaleDateString('ru-RU')
+}
+
+function toggleDone(index) {
+  todos.value[index].done = !todos.value[index].done
 }
 </script>
 
@@ -176,8 +202,7 @@ ul {
 li {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin: 8px 0;
+  gap: 12px;
 }
 
 li button {
@@ -296,5 +321,56 @@ li button {
 .modal p {
   text-align: left;
   margin-left: 0;
+}
+
+.todo-status {
+  color: #4caf50; /* зелёный для выполнено */
+  font-size: 14px;
+  min-width: 80px;
+}
+
+.todo-status::after {
+  content: '';
+  display: inline-block;
+  margin-left: 4px;
+}
+
+.todo-date {
+  color: #888;
+  font-size: 14px;
+  min-width: 110px;
+}
+
+.todo-status.done {
+  color: #4caf50;
+}
+.todo-status.in-progress {
+  color: #ff9800;
+}
+
+.custom-checkbox {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+}
+
+.custom-checkbox img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  display: block;
+}
+
+.checkbox-large {
+  width: 32px;
+  height: 32px;
+}
+
+.checkbox-small {
+  width: 20px;
+  height: 20px;
 }
 </style>
