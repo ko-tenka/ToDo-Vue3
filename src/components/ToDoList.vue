@@ -194,7 +194,7 @@ ul {
   position: absolute;
   top: 260px;
   left: 74px;
-  width: calc(100% - 148px);
+  width: 100%;
   list-style: none;
   padding: 0;
 }
@@ -203,6 +203,17 @@ li {
   display: flex;
   align-items: center;
   gap: 12px;
+  transition: box-shadow 0.2s;
+  background: #fff;
+  height: 58px;
+  margin-bottom: 1px;
+
+}
+
+li:hover {
+    background: rgba(246, 249, 255, 1);
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+
 }
 
 li button {
