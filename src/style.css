@@ -1,0 +1,30 @@
+@font-face {
+  font-family: 'Vela Sans';
+  src: url('./assets/fonts/Vela-Sans/VelaSans-Regular.ttf') format('truetype');
+  src: url('./assets//fonts//Vela-Sans/VelaSans-Medium.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+:root {
+  font-family: 'Vela Sans', sans-serif;
+  line-height: 1.32;
+  font-weight: 400;
+  font-size: 14px;
+  letter-spacing: 0;
+  color: rgba(22, 25, 29, 1);
+  background-color: rgba(255, 255, 255, 1);
+
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+
+}
+
+
+body {
+  margin: 0;
+  /* display: flex; */
+  /* place-items: center; */
+}
