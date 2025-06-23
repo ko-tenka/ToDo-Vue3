@@ -248,6 +248,7 @@ ul {
   background: #fff;
   transition: box-shadow 0.2s;
   margin-bottom: 1px;
+  border-bottom: 1px solid rgba(238, 235, 233, 1);
 }
 
 .todo-item:hover {
@@ -333,11 +334,14 @@ ul {
 .modal-overlay {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.4);
+  background: rgba(0,0,0,0.2); /* затемнение */
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
+  backdrop-filter: blur(6px); /* вот это добавляет блюр */
+  /* Для поддержки Safari: */
+  -webkit-backdrop-filter: blur(6px);
 }
 
 .modal {
