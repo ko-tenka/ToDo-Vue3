@@ -55,11 +55,10 @@
 
     <div class="sort-block">
       <span>Сортировать по:</span>
-      <select v-model="sortBy">
+      <select v-model="sortBy" class="sort-block-select">
         <option value="status">Статусу</option>
         <option value="date">Дате</option>
       </select>
-      <img src="/Vector9.png" alt="Сортировка" />
     </div>
 
     <ul>
@@ -235,6 +234,14 @@ input[type="text"] {
   gap: 8px;
   white-space: nowrap;
   font-size: 16px;
+}
+
+.sort-block select {
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 16px;
+  cursor: pointer;
 }
 
 ul {
