@@ -54,26 +54,30 @@
     </div>
 
     <ul>
-      <li v-for="(todo, index) in todos" :key="index">
-        <span class="custom-checkbox" @click="toggleDone(index)">
-          <img
-            :src="todo.done ? '/Group1427.png' : '/Ellipse34.png'"
-            :style="todo.done
-              ? 'width: 28px; height: 28px; margin-top: 7px'
-              : 'width: 20px; height: 20px;'"
-            alt="Статус"
-          />
-        </span>
-        <span>
-          {{ todo.text }}
-        </span>
-        <span class="todo-status" :class="todo.done ? 'done' : 'in-progress'">
-          {{ todo.done ? 'Выполнено' : 'В работе' }}
-        </span>
-        <span class="todo-date">
-          {{ formatDate(todo.createdAt) }}
-        </span>
-        <button @click="removeTodo(index)" aria-label="Удалить">🗑️</button>
+      <li v-for="(todo, index) in todos" :key="index" class="todo-item">
+        <div class="todo-left">
+          <span class="custom-checkbox" @click="toggleDone(index)">
+            <img
+              :src="todo.done ? '/Group1427.png' : '/Ellipse34.png'"
+              :style="todo.done
+                ? 'width: 28px; height: 28px; margin-top: 7px; margin-left: -4px'
+                : 'width: 20px; height: 20px;'"
+              alt="Статус"
+            />
+          </span>
+          <span class="todo-text">
+            {{ todo.text }}
+          </span>
+        </div>
+        <div class="todo-right">
+          <span class="todo-status" :class="todo.done ? 'done' : 'in-progress'">
+            {{ todo.done ? 'Выполнено' : 'В работе' }}
+          </span>
+          <span class="todo-date">
+            {{ formatDate(todo.createdAt) }}
+          </span>
+          <button @click="removeTodo(index)" aria-label="Удалить" style="background: none; border:none;"><img src="/Component36-2.png" alt=""></button>
+        </div>
       </li>
     </ul>
   </div>
@@ -197,31 +201,65 @@ ul {
   width: 100%;
   list-style: none;
   padding: 0;
+
 }
 
-li {
+.todo-item {
+  min-height: 58px;
+  height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 8px 16px;
+  background: #fff;
+  transition: box-shadow 0.2s;
+  margin-bottom: 1px;
+}
+
+.todo-item:hover {
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  background-color: rgba(246, 249, 255, 1);
+}
+
+.todo-left {
   display: flex;
   align-items: center;
   gap: 12px;
-  transition: box-shadow 0.2s;
-  background: #fff;
-  height: 58px;
-  margin-bottom: 1px;
-
+  min-width: 0;
 }
 
-li:hover {
-    background: rgba(246, 249, 255, 1);
-  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-
+.todo-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 300px;
 }
 
-li button {
-  margin-left: 8px;
-  font-size: 20px;
-  background: none;
-  border: none;
+.todo-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.custom-checkbox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
+}
+
+.todo-status.done {
+  color: #4caf50;
+}
+.todo-status.in-progress {
+  color: #ff9800;
+}
+
+.todo-date {
+  color: #888;
+  font-size: 14px;
+  min-width: 90px;
 }
 
 .todo-desc {
@@ -344,28 +382,6 @@ li button {
   content: '';
   display: inline-block;
   margin-left: 4px;
-}
-
-.todo-date {
-  color: #888;
-  font-size: 14px;
-  min-width: 110px;
-}
-
-.todo-status.done {
-  color: #4caf50;
-}
-.todo-status.in-progress {
-  color: #ff9800;
-}
-
-.custom-checkbox {
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
 }
 
 .custom-checkbox img {
